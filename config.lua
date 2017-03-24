@@ -1,7 +1,7 @@
 
 function load_config()
 	global.shrink_from_edge_constant = 0.75
-	global.percentage_needed_to_surrender = 70 -- percentage
+	global.percentage_needed_to_surrender = 60 -- percentage
 	global.minimum_yes_votes_to_surrender = 4
 	global.starting_inventory = "medium"
 	global.starting_equipment = "small"
@@ -10,19 +10,19 @@ function load_config()
 	global.alien_artifacts_gradual_remainder = 0
 	global.setup_finished = false
 	global.teams_currently_preparing = false
-	global.time_before_first_surrender_available = 15 -- minutes
+	global.time_before_first_surrender_available = 5 -- minutes
 	global.surrender_vote_cooldown_period = 5 -- minutes
 	global.surrender_voting_period = 1 -- minutes
 	global.config =
 		{
-			["number_of_teams"] = 3,
-			["max_players_per_team"] = 0,
+			["number_of_teams"] = 6          ,
+			["max_players_per_team"] = 10,
 			["average_team_displacement"] = 75*32,
 			["team_max_variance"] = 1,
 			["team_min_variance"] = 1,
 			["map_height"] = 150*32,
 			["map_width"] = 150*32,
-			["copy_starting_area"] = true,
+			["copy_starting_area"] = false,
 			["reveal_team_positions"] = true,
 			["team_walls"] = true,
 			["continuous_play"] = true,
@@ -48,9 +48,9 @@ function load_config()
 	global.research_ingredient_list =
 		{
 			--false means disabled.
-			["science-pack-1"] = false,
-			["science-pack-2"] = false,
-			["science-pack-3"] = false,
+			["science-pack-1"] = true,
+			["science-pack-2"] = true,
+			["science-pack-3"] = true,
 			["alien-science-pack"] = false
 		}
 --[[	global.force_list =

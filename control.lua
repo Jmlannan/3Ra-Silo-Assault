@@ -1238,8 +1238,8 @@ function create_silo_for_force(force)
 	global.silo_progress_warning_level[force.name] = 1
 	local tiles_1 = {}
 	local tiles_2 = {}
-	for X = -5, 5 do
-		for Y = -6, 5 do
+	for X = -15, 15 do
+		for Y = -16, 15 do
 			table.insert(tiles_1, {name = "grass", position = {silo_position[1]+X, silo_position[2]+Y}})
 			table.insert(tiles_2, {name = "hazard-concrete-left", position = {silo_position[1]+X, silo_position[2]+Y}})
 		end
@@ -1275,7 +1275,8 @@ function create_wall_for_force(force)
 	local surface = global.surface
 	local origin = force.get_spawn_position(surface)
 	local size = global.copy_surface.map_gen_settings.starting_area
-	local radius = math.ceil(starting_area_constant[size]/2) - 20 --radius in tiles
+	local radius = 55 --radius in tiles
+	local diameter = 2*radius
 	local perimeter_v = {}
 	local perimeter_h = {}
 	local tiles_grass = {}
@@ -1290,6 +1291,16 @@ function create_wall_for_force(force)
 			end
 		end
 	end
+	for i, entity in ipairs(surface.find_entities_filtered({area = {{origin.x-radius,origin.y-radius},{origin.x+radius, origin.y+radius}}, force = "neutral"})) do
+		entity.destroy()
+	end
+	for X = -radius, radius do
+		for Y = -radius, radius do
+			table.insert(tiles_grass, {name = "grass", position = {origin.x+X,origin.y+Y}})
+		end
+	end	
+	surface.create_entity{name="crude-oil",position = {origin.x + 10, origin.y + 10}, amount=99999999}
+	
 	for k, position in pairs (perimeter_v) do
 		table.insert(tiles_grass, {name = "grass", position = {position[1]-1,position[2]}})
 		table.insert(tiles_grass, {name = "grass", position = {position[1],position[2]}})
@@ -1306,6 +1317,7 @@ function create_wall_for_force(force)
 			surface.create_entity{name = "stone-wall", position = {position[1],position[2]}, force = force}
 		end
 	end
+
 	for k, position in pairs (perimeter_h) do
 		table.insert(tiles_grass, {name = "grass", position = {position[1],position[2]-1}})
 		table.insert(tiles_grass, {name = "grass", position = {position[1],position[2]}})
@@ -1323,10 +1335,28 @@ function create_wall_for_force(force)
 		end
 
 	end
+	for i, entity in ipairs(surface.find_entities_filtered({area = {{origin.x-radius-1,origin.y-radius-1},{origin.x+radius+1, origin.y+radius+1}} 	})) do
+		entity.destructible = false
+		entity.minable = false
+	end
+	for X = -radius, radius do
+		for Y = -radius, radius do
+			if (X < -(radius/3)) and (Y > 10)  then
+				surface.create_entity{name="iron-ore", position = {origin.x+X,origin.y+Y}, amount=99999999}
+			end
+			if (X > -(radius/3)) and (X< (radius/3)) and (Y > 10) then
+				surface.create_entity{name="copper-ore", position = {origin.x+X,origin.y+Y}, amount=99999999}
+			end
+			if (X > (radius/3)) and (Y > 10) then
+				surface.create_entity{name="coal", position = {origin.x+X,origin.y+Y}, amount=99999999}
+			end
+		end
+	end	
+	surface.create_entity{name="crude-oil",position = {origin.x + 10, origin.y - 10}, amount=99999999}
+	surface.create_entity{name="stone",position = {origin.x - 10, origin.y - 10}, amount=99999999}
 	surface.set_tiles(tiles_grass)
 	surface.set_tiles(tiles)
 end
-
 local function on_built_entity(event)
 	local entity = event.created_entity
 	if entity.force.name == "Admins" then

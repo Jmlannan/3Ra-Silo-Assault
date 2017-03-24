@@ -281,7 +281,7 @@ function open_surrender_window(player)
 		minimum_vote_message = "At least " .. global.minimum_yes_votes_to_surrender .." Yes votes and " .. global.percentage_needed_to_surrender .. "% overall Yes vote required for surrender."
 	end
 	local surrender_info_label = surrender_table.add{type = "label", name = surrender_info_label, caption = minimum_vote_message}
-	local contact_author_label = surrender_table.add{type = "label", name = contact_author_label, caption = "Please contact @JuicyJuuce in Discord regarding surrender bugs!"}
+	local contact_author_label = surrender_table.add{type = "label", name = contact_author_label, caption = "Please contact @TypicalTitan in Discord regarding surrender bugs!"}
 
 	local surrender_error_message = nil
 	if     player.force.name == "player"
